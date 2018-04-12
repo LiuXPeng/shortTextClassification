@@ -31,14 +31,16 @@ def cleanData():
 	return None
 
 def sampleData(n = 100000):
-	#抽取数据做训练集或测试集
-	trainingData = x.sample(n)
+	#抽取数据做训练集
+	sampleData = x.sample(n)
 	print("统计抽取样本",trainingData['CATEGORY'].value_counts())
 
+	'''
 	#这里将标签放在前面，文本放在后面
 	trainingData.insert(0, 'LABEL', trainingData['CATEGORY'])
 	del trainingData['CATEGORY']
+	'''
 
-	trainingData.to_csv('trainingData.txt', sep=',', header=None, index=None)
-	return None
+	#trainingData.to_csv('trainingData.txt', sep=',', header=None, index=None)
+	return sampleData
 
