@@ -29,8 +29,8 @@ def cleanData():
 	x.drop(labels=['CATEGORY'], axis=1,inplace = True)
 	x.insert(0, 'CATEGORY', category)
 	#因为已经生成新的文件，因此这里将下面生成文件的代码注释
-	print(x)
-	x.to_csv('data.csv', sep=',', header=None, index=None)
+	#print(x)
+	x.to_csv('data.csv', sep=',', header=None, index=None, encoding='utf-8')
 	counts = x['CATEGORY'].value_counts()
 	print("整个数据集二分类别统计", counts)
 	return None
@@ -48,12 +48,26 @@ def sampleData(n = 100000):
 	return sampleData
 
 def stemming():
-	f = open('data.csv', encoding= 'gb18030', errors= 'ignore')
+	#f = open('data.csv', encoding= 'gb18030', errors= 'ignore')
+	f = open('data.csv', encoding='utf-8')
+	g = open('segmentation.txt', 'w+')
+	g.truncate()#清空文件，防止测试时候不停加入
+	g.close()
+	g = open('segmentation.txt', 'a', encoding='utf-8')
 	line = f.readline()
+	n = 0
 	while line:
-		L = line.split(str = ',', num = 1)
+		L = line.split(',', 1)
 		line = f.readline()
+		g.write(L[0])
+		g.write(',')
+		n = n + 1
+		g.write(str(n))
+		g.write('\n')
+	print(n)
 	f.close()
+	g.close()
 	return 0
 
-stemming()
+#stemming()
+cleanData()
