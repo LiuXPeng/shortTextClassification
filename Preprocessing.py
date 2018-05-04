@@ -23,6 +23,7 @@ def cleanData():
 	del x['STORY']
 	del x['HOSTNAME']
 	del x['TIMESTAMP']
+	x.dropna(axis = 0)
 
 	x['CATEGORY'].replace(['b', 't', 'e', 'm'], [-1, 1, -1, -1],inplace = True)
 	category = x['CATEGORY']
@@ -30,10 +31,22 @@ def cleanData():
 	x.insert(0, 'CATEGORY', category)
 	#因为已经生成新的文件，因此这里将下面生成文件的代码注释
 	#print(x)
-	x.to_csv('data.csv', sep=',', header=None, index=None, encoding='utf-8')
+	x.to_csv('notCleandata.csv', sep=',', header=None, index=None, encoding='utf-8')
 	counts = x['CATEGORY'].value_counts()
 	print("整个数据集二分类别统计", counts)
-	return None
+	f = open('notCleandata.csv', 'r', encoding='utf-8')
+	g = open('data.txt', 'w+')
+	g.truncate()  # 清空文件，防止测试时候不停加入
+	g.close()
+	g = open('data.txt', 'a', encoding='utf-8')
+	line = f.readline()
+	while line:
+		if (line[0] == '1' and line[1] == ',') or (line[0] == '-' and line[1] == '1' and line[2] == ','):
+			g.write(line)
+		line = f.readline()
+	f.close()
+	g.close()
+	return 0
 
 def sampleData(n = 100000):
 	#抽取数据做训练集
@@ -49,7 +62,7 @@ def sampleData(n = 100000):
 
 def stemming():
 	#f = open('data.csv', encoding= 'gb18030', errors= 'ignore')
-	f = open('data.csv', encoding='utf-8')
+	f = open('data.txt', 'r', encoding='utf-8')
 	g = open('segmentation.txt', 'w+')
 	g.truncate()#清空文件，防止测试时候不停加入
 	g.close()
@@ -70,4 +83,18 @@ def stemming():
 	return 0
 
 #stemming()
-cleanData()
+#cleanData()
+f = open('data.txt', 'r', encoding='utf-8')
+line = f.readline()
+n = 1
+while line:
+	if len(line) > 120:
+		print(n, len(line))
+	'''
+	if line[0] == '1' and line[2] == ' ':
+		print(n)
+	elif line[0] == '-' and line[3] == ' ':
+		print(n)
+	'''
+	n = n + 1
+	line = f.readline()
