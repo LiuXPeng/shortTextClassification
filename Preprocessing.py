@@ -9,6 +9,7 @@ from pandas import Series, DataFrame
 import numpy as np
 import pandas as pd
 import nltk
+from nltk.tokenize import word_tokenize
 import csv
 
 def cleanData():
@@ -68,33 +69,24 @@ def stemming():
 	g.close()
 	g = open('segmentation.txt', 'a', encoding='utf-8')
 	line = f.readline()
-	n = 0
+	notWords = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now', ',', '.', ':', ';', '?', '(', ')', '[', ']', '&', '!', '*', '@', '#', '$', '%']
 	while line:
 		L = line.split(',', 1)
 		line = f.readline()
 		g.write(L[0])
 		g.write(',')
-		n = n + 1
-		g.write(str(n))
+		words = word_tokenize(L[1].lower())
+		for word in words:
+			if not word.isalpha:
+				continue
+			if word in notWords:
+				continue
+			g.write(word)
+			g.write(' ')
 		g.write('\n')
-	print(n)
 	f.close()
 	g.close()
 	return 0
 
-#stemming()
+stemming()
 #cleanData()
-f = open('data.txt', 'r', encoding='utf-8')
-line = f.readline()
-n = 1
-while line:
-	if len(line) > 120:
-		print(n, len(line))
-	'''
-	if line[0] == '1' and line[2] == ' ':
-		print(n)
-	elif line[0] == '-' and line[3] == ' ':
-		print(n)
-	'''
-	n = n + 1
-	line = f.readline()
