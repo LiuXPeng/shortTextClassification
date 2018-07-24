@@ -1,6 +1,6 @@
 # shortTextClassification
 ## 程序
-### Preprocessing.py
+### Preprocess.py
 #### 输入
 uci-news-aggregator.csv <br>
 GoogleNews-vectors-negative300.bin <br>
@@ -14,7 +14,22 @@ labels.txt <br>
 vecs.txt <br>
 vecdata.csv <br>
 ### SvmForSTC.py
-## 文件
+#### 输入
+vecdata.csv <br>
+#### 输出
+train_model.m <br>
+#### 打印输出
+十次实验结果，包括TP、NP、准确率
+## 输出文件说明
+### notCleandata.csv
+### data.txt
+### segmentation.txt
+### sentences.txt
+### labels.txt
+### 42w.model
+### vecs.txt
+### vecdata.csv
+### train_model.m
 ## 结果
 TP: 0.7948164146868251
 TN: 0.902931508687194
@@ -48,9 +63,12 @@ TN: 0.8975267379679145
 正确率： 0.8723
 ## 语料
 ### 标注数据
-#### 介绍及下载地址 https://www.kaggle.com/uciml/news-aggregator-dataset <br>
+#### 介绍及下载地址 https://www.kaggle.com/uciml/news-aggregator-dataset
 链接：https://pan.baidu.com/s/1-kIwG1uCUE2ekCSsh9cdsA 密码：fr89
 ### 谷歌新闻训练好的word2vec语料
-#### 下载地址 https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing <br>
+#### 下载地址 https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing
 链接：https://pan.baidu.com/s/1_ciXDCoV_kVrAKnCJck6Rg 密码：37dz
 ## 运行
+下载GoogleNews-vectors-negative300.bin放到当前目录 <br>
+执行Preprocess.py <br>
+执行SvmForSTC.py
