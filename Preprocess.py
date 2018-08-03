@@ -159,7 +159,7 @@ def w2v():
 	print(model.wv['computer'])
 	return
 
-#========================把整个文件中所有数据做sent2vec==========================
+#=========================把整个文件中所有数据做sent2vec==========================
 def sent2vec():
 	f = open('sentences.txt', 'r', encoding='utf-8')
 	line = f.readline()
