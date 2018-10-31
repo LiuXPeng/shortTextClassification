@@ -73,7 +73,7 @@ def cleanData():
 
 	return
 
-#=================================抽取训练集，测试集========================
+#=================================抽取训练集，测试集，验证集========================
 def splitData():
 	f = open('label_text.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
@@ -87,12 +87,14 @@ def splitData():
 	random.shuffle(dataSet)
 
 	pos = int(len(dataSet) * 0.8)
+	pos2 = int(len(dataSet) * 0.9)
 	trainingSet = dataSet[:pos]
-	testSet = dataSet[pos:]
+	testSet = dataSet[pos:pos2]
+	validateSet = dataSet[pos2:]
 
 
 	log = open('log.txt', 'a', encoding = 'utf-8')#日志文件
-	
+
 	#--------------------------训练集--------------------------
 	#记录类别信息，统计
 	b = 0
@@ -166,6 +168,41 @@ def splitData():
 	print(count)
 	log.write('count:' + str(count) + '\n')
 
+
+	#---------------------------------验证集------------------------
+	b = 0
+	t = 0
+	e = 0
+	m = 0
+	count = 0
+	h = open('validateSet.txt', 'w', encoding = 'utf-8')
+	h.truncate()
+	h.close()
+	h = open('validateSet.txt', 'a', encoding = 'utf-8')
+	for L in validateSet:
+		h.write(L[0] + ',' + L[1])
+		count += 1
+		if L[0] == 'b':
+			b += 1
+		if L[0] == 't':
+			t += 1
+		if L[0] == 'e':
+			e += 1
+		if L[0] == 'm':
+			m += 1
+	h.close()
+	print('验证集：')
+	log.write('验证集：' + '\n')
+	print('b:', b, b / count)
+	log.write('b:' + str(b) + ', ' + str(b / count) + '\n')
+	print('t:', t, t / count)
+	log.write('t:' + str(t) + ', ' + str(t / count) + '\n')
+	print('e:', e, e / count)
+	log.write('e:' + str(e) + ', ' + str(e / count) + '\n')
+	print('m:', m, m / count)
+	log.write('m:' + str(m) + ', ' + str(m / count) + '\n')
+	print(count)
+	log.write('count:' + str(count) + '\n')
 	log.close()
 
 	return
@@ -182,7 +219,7 @@ def main():
 	f.close()
 
 	#cleanData()
-	#splitData()
+	splitData()
 	return
 
 
