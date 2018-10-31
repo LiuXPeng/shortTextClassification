@@ -56,13 +56,13 @@ def cleanData():
 
 	#---------------------------打印结果，写入日志-------------------------------------
 	print('b:', b, b / count)
-	log.write('b:' + str(b) + str(b / count) + '\n')
+	log.write('b:' + str(b) + ', ' + str(b / count) + '\n')
 	print('t:', t, t / count)
-	log.write('t:' + str(t) + str(t / count) + '\n')
+	log.write('t:' + str(t) + ', ' + str(t / count) + '\n')
 	print('e:', e, e / count)
-	log.write('e:' + str(e) + str(e / count) + '\n')
+	log.write('e:' + str(e) + ', ' + str(e / count) + '\n')
 	print('m:', m, m / count)
-	log.write('m:' + str(m) + str(m / count) + '\n')
+	log.write('m:' + str(m) + ', ' + str(m / count) + '\n')
 	print(count)
 	log.write('count:' + str(count) + '\n')
 
@@ -81,8 +81,8 @@ def main():
 	f.write(str(datetime.date.today()) + '\n')
 	f.close()
 
-	#cleanData()
-	
+	cleanData()
+
 	return
 
 
