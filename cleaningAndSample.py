@@ -12,6 +12,7 @@ import pandas as pd
 import time
 import datetime
 import re
+import random
 
 
 
@@ -72,6 +73,105 @@ def cleanData():
 
 	return
 
+#=================================抽取训练集，测试集========================
+def splitData():
+	f = open('label_text.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
+
+	#--------------利用random，打乱list中的顺序，然后按照比例抽取----------
+	dataSet = []
+	while line:
+		dataSet.append(line.split(','))
+		line = f.readline()
+	f.close()
+	random.shuffle(dataSet)
+
+	pos = int(len(dataSet) * 0.8)
+	trainingSet = dataSet[:pos]
+	testSet = dataSet[pos:]
+
+
+	log = open('log.txt', 'a', encoding = 'utf-8')#日志文件
+	
+	#--------------------------训练集--------------------------
+	#记录类别信息，统计
+	b = 0
+	t = 0
+	e = 0
+	m = 0
+	count = 0
+	g = open('trainingSet.txt', 'w', encoding = 'utf-8')
+	g.truncate()
+	g.close()
+	g = open('trainingSet.txt', 'a', encoding = 'utf-8')
+	for L in trainingSet:
+		g.write(L[0] + ',' + L[1])
+		count += 1
+		if L[0] == 'b':
+			b += 1
+		if L[0] == 't':
+			t += 1
+		if L[0] == 'e':
+			e += 1
+		if L[0] == 'm':
+			m += 1
+	g.close()
+	#--------------打印结果，写入日志-----------
+	print('训练集：')
+	log.write('训练集：' + '\n')
+	print('b:', b, b / count)
+	log.write('b:' + str(b) + ', ' + str(b / count) + '\n')
+	print('t:', t, t / count)
+	log.write('t:' + str(t) + ', ' + str(t / count) + '\n')
+	print('e:', e, e / count)
+	log.write('e:' + str(e) + ', ' + str(e / count) + '\n')
+	print('m:', m, m / count)
+	log.write('m:' + str(m) + ', ' + str(m / count) + '\n')
+	print(count)
+	log.write('count:' + str(count) + '\n')
+
+
+	#---------------------------------测试集------------------------
+	b = 0
+	t = 0
+	e = 0
+	m = 0
+	count = 0
+	h = open('testSet.txt', 'w', encoding = 'utf-8')
+	h.truncate()
+	h.close()
+	h = open('testSet.txt', 'a', encoding = 'utf-8')
+	for L in testSet:
+		h.write(L[0] + ',' + L[1])
+		count += 1
+		if L[0] == 'b':
+			b += 1
+		if L[0] == 't':
+			t += 1
+		if L[0] == 'e':
+			e += 1
+		if L[0] == 'm':
+			m += 1
+	h.close()
+	print('测试集：')
+	log.write('测试集：' + '\n')
+	print('b:', b, b / count)
+	log.write('b:' + str(b) + ', ' + str(b / count) + '\n')
+	print('t:', t, t / count)
+	log.write('t:' + str(t) + ', ' + str(t / count) + '\n')
+	print('e:', e, e / count)
+	log.write('e:' + str(e) + ', ' + str(e / count) + '\n')
+	print('m:', m, m / count)
+	log.write('m:' + str(m) + ', ' + str(m / count) + '\n')
+	print(count)
+	log.write('count:' + str(count) + '\n')
+
+	log.close()
+
+	return
+
+
+
 
 def main():
 	#--------------------------------每次运行，打印、写入时间戳-------------------------
@@ -81,8 +181,8 @@ def main():
 	f.write(str(datetime.date.today()) + '\n')
 	f.close()
 
-	cleanData()
-
+	#cleanData()
+	#splitData()
 	return
 
 
