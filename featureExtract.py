@@ -120,6 +120,39 @@ def oneHotGet(text):
 		return dictionary[text]
 	return False
 
+#测试one-hot编码中的全零向量
+def oneHotStatistics():
+	f = open('testSet.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
+	
+	#这里调用oneHotGet()函数，文件不停打开加载关闭太慢，所以直接写
+	g = open('dictionary.plk', 'rb')
+	dictionary = pickle.load(g)
+	g.close()
+
+	count = 0
+	m = 0
+	while line:
+		count += 1
+		L = line.split(',')
+		line = f.readline()
+		text = normalize_text(L[1])
+		words = nltk_tokenize(text)
+		for word in words:
+			if word in dictionary:
+				m += 1
+				break
+
+	f.close()
+
+	print('零向量共计： ', count - m, (count - m) / count)
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('one-hot零向量总计： ' + str(count - m) + ', ' + str((count - m) / count) + '\n')
+	log.close()
+
+	return
+
+
 
 #===============================================================================
 #===============================================================================
@@ -128,11 +161,12 @@ def main():
 	print(datetime.date.today())
 	f = open('log.txt', 'a', encoding = 'utf-8')
 	f.write('\n=============================================\n')
-	f.write(str(datetime.date.today()) + '\n')
+	f.write(str(datetime.date.today()) +'    featureExtract.py' + '\n')
 	f.close()
 
 	#--------------------------------------------------------
 	#oneHotDict()
+	#oneHotStatistics()
 
 	return
 

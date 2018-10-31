@@ -215,11 +215,11 @@ def main():
 	print(datetime.date.today())
 	f = open('log.txt', 'a', encoding = 'utf-8')
 	f.write('\n=============================================\n')
-	f.write(str(datetime.date.today()) + '\n')
+	f.write(str(datetime.date.today()) + '    cleaningAndSample.py' + '\n')
 	f.close()
 
 	#cleanData()
-	splitData()
+	#splitData()
 	return
 
 
