@@ -76,7 +76,32 @@ def nltk_tokenize(text):
 	return features
 
 
+#标签、分词文件
+def label_segmentation():
+	f = open('trainingSet.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
+	g = open('label_segmentation.txt', 'w', encoding = 'utf-8')
+	g.truncate()
+	g.close()
+	g = open('label_segmentation.txt', 'a', encoding = 'utf-8')
 
+	while line:
+		L = line.split(',')
+		line = f.readline()
+		g.write(L[0] + ',')
+		text = normalize_text(L[1])
+		words = nltk_tokenize(text)
+		g.write(' '.join(words) + '\n')
+
+	g.close()
+	f.close()
+
+	print('标签，分词文件')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('完成标签、分词文件： label_segmentation.txt' + '\n')
+	log.close()
+
+	return
 
 #==================================================================
 #==========================one-hot编码==============================
@@ -167,6 +192,7 @@ def main():
 	#--------------------------------------------------------
 	#oneHotDict()
 	#oneHotStatistics()
+	label_segmentation()
 
 	return
 
