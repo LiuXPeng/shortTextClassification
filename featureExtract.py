@@ -178,7 +178,37 @@ def oneHotStatistics():
 	return
 
 
+#==========================tf-idf=======================================
+def tfIdfDict():
+	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
+	dictionary = {}
+	count = 0
+	while line:
+		line = line.strip('\n')#特别注意这个换行符问题！
+		L = line.split(',')
+		words = L[1].split(' ')
+		line = f.readline()
+		for word in words:
+			if word in dictionary:
+				dictionary[word] += 1
+			else:
+				dictionary[word] = 1
+				count += 1
 
+	print(count)
+
+	f.close()
+
+	g = open('idfDDictionary.plk', 'wb')
+	pickle.dump(dictionary, g)
+	g.close()
+
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('计算idf中，每个词在整个文本中出现的次数，也就是包含词的文章数，即idf分母，按照dict存在idfDDictionary.plk' + '\n')
+	log.close()
+
+	return
 #===============================================================================
 #===============================================================================
 def main():
@@ -192,7 +222,8 @@ def main():
 	#--------------------------------------------------------
 	#oneHotDict()
 	#oneHotStatistics()
-	label_segmentation()
+	#label_segmentation()
+	tfIdfDict()
 
 	return
 
