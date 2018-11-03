@@ -12,6 +12,9 @@ import re
 import nltk
 from nltk.tokenize import word_tokenize
 import pickle
+import numpy as np
+import sklearn
+from sklearn.decomposition import PCA
 
 
 
@@ -209,6 +212,44 @@ def tfIdfDict():
 	log.close()
 
 	return
+
+
+
+#===================================PCA=========================================
+#---------------这里要根据后面需求简单重构，暂时只是调通了pca训练-------------------
+def pcaTrain(n = 600):
+	pca = PCA(n_components = n)
+	g = open('dictionary.plk', 'rb')
+	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	dictionary = pickle.load(g)
+	g.close()
+	X = np.zeros(shape = (1000, 67216))
+	for i in range(1000):
+		line = f.readline()
+		line = line.strip('\n')#特别注意这个换行符问题！
+		L = line.split(',')
+		words = L[1].split(' ')
+		for word in words:
+			X[i][dictionary[word]] += 1
+	pca.fit(X)
+	newX = pca.fit_transform(X)
+	print(newX)
+
+	f.close()
+
+	print("pca降维，维度： ", n)
+
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('pca降维， 维度：' + str(n) + '\n')
+	log.close()
+
+	return
+
+
+
+
+
+
 #===============================================================================
 #===============================================================================
 def main():
@@ -223,7 +264,8 @@ def main():
 	#oneHotDict()
 	#oneHotStatistics()
 	#label_segmentation()
-	tfIdfDict()
+	#tfIdfDict()
+	pcaTrain()
 
 	return
 
