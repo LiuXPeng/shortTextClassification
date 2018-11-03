@@ -15,6 +15,7 @@ import pickle
 import numpy as np
 import sklearn
 from sklearn.decomposition import PCA
+from sklearn.decomposition import LatentDirichletAllocation
 
 
 
@@ -246,6 +247,38 @@ def pcaTrain(n = 600):
 	return
 
 
+#===================================LDA=========================================
+#---------------这里要根据后面需求简单重构，暂时只是调通了pca训练-------------------
+def ldaTrain(n = 4):
+	lda = LatentDirichletAllocation(n_components = n)
+	g = open('dictionary.plk', 'rb')
+	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	dictionary = pickle.load(g)
+	g.close()
+	X = np.zeros(shape = (1000, 67216))
+	for i in range(1000):
+		line = f.readline()
+		line = line.strip('\n')#特别注意这个换行符问题！
+		L = line.split(',')
+		words = L[1].split(' ')
+		for word in words:
+			X[i][dictionary[word]] += 1
+	lda.fit(X)
+	newX = lda.fit_transform(X)
+	print(newX)
+
+	f.close()
+
+	print("lda降维，维度： ", n)
+
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('lda降维， 维度：' + str(n) + '\n')
+	log.close()
+
+	return
+
+
+
 
 
 
@@ -265,8 +298,8 @@ def main():
 	#oneHotStatistics()
 	#label_segmentation()
 	#tfIdfDict()
-	pcaTrain()
-
+	#pcaTrain()
+	ldaTrain()
 	return
 
 
