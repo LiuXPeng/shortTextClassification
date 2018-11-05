@@ -1,3 +1,4 @@
-pca.plk
-pca.plk
+*.plk
 GoogleNews-vectors-negative300.bin
+label_segmentation.txt
+label_text.txt
