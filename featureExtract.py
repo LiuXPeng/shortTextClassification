@@ -17,6 +17,7 @@ import sklearn
 from sklearn.decomposition import PCA
 from sklearn.decomposition import LatentDirichletAllocation
 import random
+import math
 
 
 
@@ -141,14 +142,29 @@ def oneHotDict():
 
 	return
 
-#输入词，返回索引
-def oneHotGet(text):
+#--------------------------获取n条数据的one-hot------------------
+def oneHotGet(Y):
+	n = len(Y)
 	f = open('dictionary.plk', 'rb')
 	dictionary = pickle.load(f)
 	f.close()
-	if text in dictionary:
-		return dictionary[text]
-	return False
+
+	Z = []
+	for text in Y:
+		temp = [0] * 67216
+		words = text.split(' ')
+		for word in words:
+			if word in dictionary:
+				temp[dictionary[word]] += 1
+		Z.append(temp)
+
+	print('抽取' + str(n) + '条one-hot编码\n')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('抽取' + str(n) + '条one-hot编码\n')
+	log.close()
+
+	return Z
+
 
 #测试one-hot编码中的全零向量
 def oneHotStatistics():
@@ -183,7 +199,10 @@ def oneHotStatistics():
 	return
 
 
-#==========================tf-idf=======================================
+#=========================================================================
+#==================================tf-idf===============================
+
+#----------------------------建立tf-idf字典---------------------------
 def tfIdfDict():
 	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
@@ -214,6 +233,34 @@ def tfIdfDict():
 	log.close()
 
 	return
+
+#--------------------------获取n条数据的tf-idf------------------
+def tfIdfGet(Y):
+	n = len(Y)
+	f = open('dictionary.plk', 'rb')
+	dictionary = pickle.load(f)
+	f.close()
+	g= open('idfDDictionary.plk', 'rb')
+	idfDictionary = pickle.load(g)
+	g.close()
+
+	Z = []
+	for text in Y:
+		temp = [0] * 67216
+		words = text.split(' ')
+		for word in words:
+			if word in dictionary:
+				tf = 1 / len(words)
+				idf = math.log(337930 / idfDictionary[word])
+				temp[dictionary[word]] += (tf * idf)
+		Z.append(temp)
+
+	print('抽取' + str(n) + '条tf-idf编码\n')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('抽取' + str(n) + '条tf-idf编码\n')
+	log.close()
+
+	return  Z
 
 
 
@@ -325,8 +372,16 @@ def main():
 	#tfIdfDict()
 	#pcaTrain()
 	#ldaTrain()
+	'''
 	X, Y = sample(10)
-	print(X, Y)
+	Z = tfIdfGet(Y)
+	print(Y[0])
+	for i in Z[0]:
+		if i != 0:
+			print(i)
+	'''
+	
+
 	return
 
 
