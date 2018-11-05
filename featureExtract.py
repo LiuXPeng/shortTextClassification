@@ -16,6 +16,7 @@ import numpy as np
 import sklearn
 from sklearn.decomposition import PCA
 from sklearn.decomposition import LatentDirichletAllocation
+import random
 
 
 
@@ -277,8 +278,32 @@ def ldaTrain(n = 4):
 
 	return
 
+#==========================随机抽取数据，label和数据以list形式返回=========================
+def sample(n = 5):
+	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
 
+	#--------------利用random，打乱list中的顺序，然后按照比例抽取----------
+	dataSet = []
+	while line:
+		dataSet.append(line.split(','))
+		line = f.readline()
+	f.close()
+	random.shuffle(dataSet)
 
+	X = []
+	Y = []
+
+	for i in range(n):
+		X.append(dataSet[i][0])
+		Y.append(dataSet[i][1].strip('\n'))
+
+	print('随机抽取' + str(n) + '条数据\n')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('随机抽取：' + str(n) + '条数据\n')
+	log.close()
+
+	return X,Y
 
 
 
@@ -299,7 +324,9 @@ def main():
 	#label_segmentation()
 	#tfIdfDict()
 	#pcaTrain()
-	ldaTrain()
+	#ldaTrain()
+	X, Y = sample(10)
+	print(X, Y)
 	return
 
 
