@@ -18,6 +18,11 @@ from sklearn.decomposition import PCA
 from sklearn.decomposition import LatentDirichletAllocation
 import random
 import math
+import warnings
+warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
+import gensim
+from gensim.models import Word2Vec
+from gensim.models.word2vec import LineSentence
 
 
 
@@ -158,7 +163,7 @@ def oneHotGet(Y):
 				temp[dictionary[word]] += 1
 		Z.append(temp)
 
-	print('抽取' + str(n) + '条one-hot编码\n')
+	print('抽取' + str(n) + '条one-hot编码')
 	log = open('log.txt', 'a', encoding = 'utf-8')
 	log.write('抽取' + str(n) + '条one-hot编码\n')
 	log.close()
@@ -265,65 +270,101 @@ def tfIdfGet(Y):
 
 
 #===================================PCA=========================================
-#---------------这里要根据后面需求简单重构，暂时只是调通了pca训练-------------------
-def pcaTrain(n = 600):
+#----------------------------------pca训练----------------------------------
+def pcaTrain(X, n = 600):
+	m = len(X)
 	pca = PCA(n_components = n)
-	g = open('dictionary.plk', 'rb')
-	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
-	dictionary = pickle.load(g)
-	g.close()
-	X = np.zeros(shape = (1000, 67216))
-	for i in range(1000):
-		line = f.readline()
-		line = line.strip('\n')#特别注意这个换行符问题！
-		L = line.split(',')
-		words = L[1].split(' ')
-		for word in words:
-			X[i][dictionary[word]] += 1
+
 	pca.fit(X)
-	newX = pca.fit_transform(X)
-	print(newX)
 
-	f.close()
+	g = open('pca.plk', 'wb')
+	pickle.dump(pca, g)
+	g.close()
 
-	print("pca降维，维度： ", n)
-
+	print("pca降维，维度：", n, '训练集规模：', m)
 	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('pca降维， 维度：' + str(n) + '\n')
+	log.write('pca降维， 维度：' + str(n) + ', 训练集规模： ' + str(m) + '\n')
+	log.write('模型保存在： pca.plk中\n')
 	log.close()
 
 	return
+
+def pcaGet(X):
+	g= open('pca.plk', 'rb')
+	pca = pickle.load(g)
+	g.close()
+
+	newX = pca.fit_transform(X)
+	print('pca降维')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('pca降维\n')
+	log.close()
+	return newX
 
 
 #===================================LDA=========================================
-#---------------这里要根据后面需求简单重构，暂时只是调通了pca训练-------------------
-def ldaTrain(n = 4):
+#---------------------------------lda训练---------------------------------
+def ldaTrain(X, n = 4):
+	m = len(X)
 	lda = LatentDirichletAllocation(n_components = n)
-	g = open('dictionary.plk', 'rb')
-	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
-	dictionary = pickle.load(g)
-	g.close()
-	X = np.zeros(shape = (1000, 67216))
-	for i in range(1000):
-		line = f.readline()
-		line = line.strip('\n')#特别注意这个换行符问题！
-		L = line.split(',')
-		words = L[1].split(' ')
-		for word in words:
-			X[i][dictionary[word]] += 1
+
 	lda.fit(X)
-	newX = lda.fit_transform(X)
-	print(newX)
 
-	f.close()
+	g = open('lda.plk', 'wb')
+	pickle.dump(lda, g)
+	g.close()
 
-	print("lda降维，维度： ", n)
-
+	print("lda降维，维度：", n, '训练集规模：', m)
 	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('lda降维， 维度：' + str(n) + '\n')
+	log.write('lda降维， 维度：' + str(n) + ', 训练集规模： ' + str(m) + '\n')
+	log.write('模型保存在： lda.plk中\n')
 	log.close()
 
 	return
+
+
+def ldaGet(X):
+	g= open('lda.plk', 'rb')
+	lda = pickle.load(g)
+	g.close()
+
+	newX = lda.fit_transform(X)
+
+	print('lda降维')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('lda降维\n')
+	log.close()
+	return newX
+
+#============================================================================
+#-------------------------------word2vec----------------------------------
+def word2vec(X):
+	newX = []
+	model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin',binary=True)
+	for text in X:
+		words = text.strip('\n').split(' ')
+		m = np.zeros(300)
+		n = 0
+		for word in words:
+			try:
+				k = model.wv[word]
+				m = m + k
+				n = n + 1
+			except:
+				continue
+		if n != 0:
+			#取平均
+			m = m / n
+		newX.append(m)
+
+	print('word2vec')
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('word2vec\n')
+	log.close()
+
+
+	return newX
+
 
 #==========================随机抽取数据，label和数据以list形式返回=========================
 def sample(n = 5):
@@ -345,7 +386,7 @@ def sample(n = 5):
 		X.append(dataSet[i][0])
 		Y.append(dataSet[i][1].strip('\n'))
 
-	print('随机抽取' + str(n) + '条数据\n')
+	print('随机抽取' + str(n) + '条数据')
 	log = open('log.txt', 'a', encoding = 'utf-8')
 	log.write('随机抽取：' + str(n) + '条数据\n')
 	log.close()
@@ -379,8 +420,15 @@ def main():
 	for i in Z[0]:
 		if i != 0:
 			print(i)
+	X, Y = sample(1000)
+	Z = tfIdfGet(Y)
+	ldaTrain(Z)
+	pcaTrain(Z)
+	X, Y = sample(5)
+	Y = tfIdfGet(Y)
+	print(ldaGet(Y))
+	print(pcaGet(Y))
 	'''
-	
 
 	return
 
