@@ -91,10 +91,28 @@ def nltk_tokenize(text):
 def label_segmentation():
 	f = open('trainingSet.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
-	g = open('label_segmentation.txt', 'w', encoding = 'utf-8')
+	g = open('label_segmentation_train.txt', 'w', encoding = 'utf-8')
 	g.truncate()
 	g.close()
-	g = open('label_segmentation.txt', 'a', encoding = 'utf-8')
+	g = open('label_segmentation_train.txt', 'a', encoding = 'utf-8')
+
+	while line:
+		L = line.split(',')
+		line = f.readline()
+		g.write(L[0] + ',')
+		text = normalize_text(L[1])
+		words = nltk_tokenize(text)
+		g.write(' '.join(words) + '\n')
+
+	g.close()
+	f.close()
+
+	f = open('testSet.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
+	g = open('label_segmentation_test.txt', 'w', encoding = 'utf-8')
+	g.truncate()
+	g.close()
+	g = open('label_segmentation_test.txt', 'a', encoding = 'utf-8')
 
 	while line:
 		L = line.split(',')
@@ -109,7 +127,7 @@ def label_segmentation():
 
 	print('标签，分词文件')
 	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('完成标签、分词文件： label_segmentation.txt' + '\n')
+	log.write('完成标签、分词文件： label_segmentation_train.txt、label_segmentation_test.txt' + '\n')
 	log.close()
 
 	return
@@ -209,7 +227,7 @@ def oneHotStatistics():
 
 #----------------------------建立tf-idf字典---------------------------
 def tfIdfDict():
-	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	f = open('label_segmentation_train.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
 	dictionary = {}
 	count = 0
@@ -368,7 +386,7 @@ def word2vec(X):
 
 #==========================随机抽取数据，label和数据以list形式返回=========================
 def sample(n = 5):
-	f = open('label_segmentation.txt', 'r', encoding = 'utf-8')
+	f = open('label_segmentation_train.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
 
 	#--------------利用random，打乱list中的顺序，然后按照比例抽取----------

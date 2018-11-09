@@ -3,3 +3,5 @@ GoogleNews-vectors-negative300.bin
 label_segmentation.txt
 label_text.txt
 *.m
+label_segmentation_test.txt
+label_segmentation_train.txt

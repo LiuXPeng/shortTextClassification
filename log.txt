@@ -370,3 +370,10 @@ wordvec
 随机抽取：3条数据
 wordvec
 随机抽取：10条数据
+
+=============================================
+2018-11-09    featureExtract.py
+
+=============================================
+2018-11-09    featureExtract.py
+完成标签、分词文件： label_segmentation_train.txt、label_segmentation_test.txt
