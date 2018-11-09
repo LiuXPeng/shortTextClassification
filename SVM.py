@@ -14,17 +14,35 @@ from sklearn.externals import joblib
 
 #===============================================================================
 #--------------------------------svm, one-hot-----------------------------------
-def svmOneHotFindBestDivide(n = 1000):
+def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot', descend = None):
 	X, Y = fE.sample(n)
-	y = fE.oneHotGet(Y)
 	x = []
 	for s in X:
-		if s == 'e':
-			x.append(-1)
-		else:
-			x.append(1)
-	clf = svm.SVC()
+		x.append(lb[s])
+	if fe == 'one-hot':
+		y = fE.oneHotGet(Y)
+	if fe == 'tf-idf':
+		y = fE.tfIdfGet(Y)
+	if fe == 'word2vec':
+		y = fE.word2vec(Y)
+	if descend == 'pca':
+		y = pcaGet(y)
+	if descend == 'lda':
+		y = ldaGet(y)
+	clf = svm.SVC(class_weight = {-1:1, 1: W})
 	clf.fit(x, y)
+	joblib.dump(clf, "svmTrainModel.m")
+
+	print('svm训练, label转换为:', lb, '\n训练集规模：', n, '\n权重：', W,'\n特征提取为:', fe, '\n降维方法：'， descend)
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('svm训练, label转换为: ' + str(lb) + '\n训练集规模： ' + str(n) + '\n权重： ' + str(W) + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
+	log.write('模型保存在： svmTrainModel.m中\n')
+	log.close()
+
+	return
+
+def accuracy():
+	
 
 
 
