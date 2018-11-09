@@ -15,20 +15,20 @@ from sklearn.externals import joblib
 #===============================================================================
 #-------------------------------------svm-----------------------------------
 def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot', descend = None):
-	X, Y = fE.sample(n)
-	x = []
-	for s in X:
-		x.append(lb[s])
+	Y, X = fE.sample(n)
+	y = []
+	for s in Y:
+		y.append(lb[s])
 	if fe == 'one-hot':
-		y = fE.oneHotGet(Y)
+		x = fE.oneHotGet(X)
 	if fe == 'tf-idf':
-		y = fE.tfIdfGet(Y)
+		x = fE.tfIdfGet(X)
 	if fe == 'word2vec':
-		y = fE.word2vec(Y)
+		x = fE.word2vec(X)
 	if descend == 'pca':
-		y = pcaGet(y)
+		x = pcaGet(X)
 	if descend == 'lda':
-		y = ldaGet(y)
+		x = ldaGet(X)
 	clf = svm.SVC(class_weight = {-1:1, 1: W})
 	clf.fit(x, y)
 	joblib.dump(clf, "svmTrainModel.m")
@@ -41,7 +41,38 @@ def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot
 
 	return
 
-def accuracy():
+def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None):
+	clf = joblib.load("train_model.m")
+	f = open('label_segmentation_test.txt', 'r', encoding = 'utf-8')
+	dataSet = []
+	while line:
+		dataSet.append(line.split(','))
+		line = f.readline()
+	f.close()
+
+	count = 0
+	right = 0
+
+	for data in dataSet:
+		Y = [data[0]]
+		X = [data[1].strip('\n')]
+		
+		if fe == 'one-hot':
+			x = fE.oneHotGet(X)
+		if fe == 'tf-idf':
+			x = fE.tfIdfGet(X)
+		if fe == 'word2vec':
+			x = fE.word2vec(X)
+		if descend == 'pca':
+			x = pcaGet(X)
+		if descend == 'lda':
+			x = ldaGet(X)
+
+		clf.predict(x[0])
+
+
+
+	return
 
 
 
