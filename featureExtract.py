@@ -181,10 +181,11 @@ def oneHotGet(Y):
 				temp[dictionary[word]] += 1
 		Z.append(temp)
 
-	print('抽取' + str(n) + '条one-hot编码')
-	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('抽取' + str(n) + '条one-hot编码\n')
-	log.close()
+	if __name__ == '__main__':
+		print('抽取' + str(n) + '条one-hot编码')
+		log = open('log.txt', 'a', encoding = 'utf-8')
+		log.write('抽取' + str(n) + '条one-hot编码\n')
+		log.close()
 
 	return Z
 
@@ -278,10 +279,12 @@ def tfIdfGet(Y):
 				temp[dictionary[word]] += (tf * idf)
 		Z.append(temp)
 
-	print('抽取' + str(n) + '条tf-idf编码\n')
-	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('抽取' + str(n) + '条tf-idf编码\n')
-	log.close()
+
+	if __name__ == '__main__':
+		print('抽取' + str(n) + '条tf-idf编码\n')
+		log = open('log.txt', 'a', encoding = 'utf-8')
+		log.write('抽取' + str(n) + '条tf-idf编码\n')
+		log.close()
 
 	return  Z
 
@@ -313,10 +316,12 @@ def pcaGet(X):
 	g.close()
 
 	newX = pca.fit_transform(X)
-	print('pca降维')
-	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('pca降维\n')
-	log.close()
+
+	if __name__ == '__main__':
+		print('pca降维')
+		log = open('log.txt', 'a', encoding = 'utf-8')
+		log.write('pca降维\n')
+		log.close()
 	return newX
 
 
@@ -348,10 +353,11 @@ def ldaGet(X):
 
 	newX = lda.fit_transform(X)
 
-	print('lda降维')
-	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('lda降维\n')
-	log.close()
+	if __name__ == '__main__':
+		print('lda降维')
+		log = open('log.txt', 'a', encoding = 'utf-8')
+		log.write('lda降维\n')
+		log.close()
 	return newX
 
 #============================================================================
@@ -375,10 +381,11 @@ def word2vec(X):
 			m = m / n
 		newX.append(m)
 
-	print('word2vec')
-	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('word2vec\n')
-	log.close()
+	if __name__ == '__main__':
+		print('word2vec')
+		log = open('log.txt', 'a', encoding = 'utf-8')
+		log.write('word2vec\n')
+		log.close()
 
 
 	return newX
