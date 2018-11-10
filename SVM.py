@@ -10,6 +10,8 @@ import featureExtract as fE
 import numpy as np
 from sklearn import svm
 from sklearn.externals import joblib
+import time
+import datetime
 
 
 #===============================================================================
@@ -33,7 +35,7 @@ def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot
 	clf.fit(x, y)
 	joblib.dump(clf, "svmTrainModel.m")
 
-	print('svm训练, label转换为:', lb, '\n训练集规模：', n, '\n权重：', W,'\n特征提取为:', fe, '\n降维方法：'， descend)
+	print('svm训练, label转换为:', lb, '\n训练集规模：', n, '\n权重：', W,'\n特征提取为:', fe, '\n降维方法：', descend)
 	log = open('log.txt', 'a', encoding = 'utf-8')
 	log.write('svm训练, label转换为: ' + str(lb) + '\n训练集规模： ' + str(n) + '\n权重： ' + str(W) + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
 	log.write('模型保存在： svmTrainModel.m中\n')
@@ -42,8 +44,9 @@ def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot
 	return
 
 def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None):
-	clf = joblib.load("train_model.m")
+	clf = joblib.load("svmTrainModel.m")
 	f = open('label_segmentation_test.txt', 'r', encoding = 'utf-8')
+	line = f.readline()
 	dataSet = []
 	while line:
 		dataSet.append(line.split(','))
@@ -54,7 +57,8 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	right = 0
 
 	for data in dataSet:
-		Y = [data[0]]
+		count += 1
+		Y = data[0]
 		X = [data[1].strip('\n')]
 		
 		if fe == 'one-hot':
@@ -68,13 +72,22 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		if descend == 'lda':
 			x = ldaGet(X)
 
-		clf.predict(x[0])
+		if clf.predict(x)[0] == lb[Y]:
+			right += 1
+
+		if count % 5000 == 0:
+			break
+
+	print('svm测试\nlabel转换为:', lb, '\n特征提取为:', fe, '\n降维方法：', descend)
+	print('总计：', count, '分类正确', right, right / count)
+	log = open('log.txt', 'a', encoding = 'utf-8')
+	log.write('svm测试\nlabel转换为: ' + str(lb)  + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
+	log.write('总计：' + str(count) + ', 分类正确' + str(right) + ', '  + str(right / count))
+	log.close()
 
 
 
 	return
-
-
 
 
 
@@ -89,6 +102,9 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
+	#svmOneHot()
+	accuracy()
+
 
 
 	return
