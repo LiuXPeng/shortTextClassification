@@ -5,11 +5,13 @@
 
 __author__ = 'lxp'
 
+
 import time
 import re
 import nltk
 import sys
 import logging
+from nltk import WordNetLemmatizer
 
 
 
@@ -108,6 +110,7 @@ def timeTrans(a):
 #停词表构建
 def load_stopwords():
 	stop_words = nltk.corpus.stopwords.words('english')
+	#print(stop_words)
 	stop_words.extend(['this','that','the','might','have','been','from',
                 'but','they','will','has','having','had','how','went'
                 'were','why','and','still','his','her','was','its','per','cent',
@@ -133,7 +136,7 @@ def normalize_text(text):
 	text = re.sub('((www\.[^\s]+)|(https?://[^\s]+)|(pic\.twitter\.com/[^\s]+))','', text)
 	text = re.sub('@[^\s]+','', text)
 	text = re.sub('#([^\s]+)', '', text)
-	text = re.sub('[:;>?<=*+()/,\-#!$%\{˜|\}\[^_\\@\]1234567890’‘]',' ', text)
+	text = re.sub('[:;>?<=*+()/,\-#!$%\{˜|\}\[^_\\@\]1234567890’‘]','', text)
 	text = re.sub('[\d]','', text)
 	text = text.replace(".", '')
 	text = text.replace("'", ' ')
@@ -148,57 +151,68 @@ def normalize_text(text):
 	text = text.replace("\xe2\x80\x99s", " ").replace("\xe2\x80\x98", ' ').replace("\xe2\x80\x99", ' ').replace("\xe2\x80\x9c", " ").replace("\xe2\x80\x9d", " ")
 	text = text.replace("\xe2\x82\xac", " ").replace("\xc2\xa3", " ").replace("\xc2\xa0", " ").replace("\xc2\xab", " ").replace("\xf0\x9f\x94\xb4", " ").replace("\xf0\x9f\x87\xba\xf0\x9f\x87\xb8\xf0\x9f", "")
 	text = re.sub("[^a-zA-Z]", " ", text)
+	#print(text)
 	return text
 
 
 #===============================分词、去停词==============================
 def nltk_tokenize(text):
-	tag = False
-	hashtag = ''
 	features = []
-	for i in range(len(text)):
-		print(text[i])
-		if text[i] == '#':
-			tag = True
-			continue
-		if tag and text[i] != ' ':
-			hashtag += text[i]
-			print(hashtag)
-		if tag and text[i] == ' ':
-			tag = False
-			features.append(hashtag)
-			hashtag = ''
-
-
 	tokens = []
 	tokens = text.split()
 	stop_words = load_stopwords()
 	for word in tokens:
 			if word.lower() not in stop_words:
 				features.append(word)
-	print
 	return features
 
+
+#===================================清洗===================================
+#----------------------------输入str，输出list------------------------------
 def tokenize(text):
+	#lmtzr = WordNetLemmatizer()
 	tag = False
 	hashtag = ''
 	features = []
+	temp = []
 	for i in range(len(text)):
-		print(text[i])
 		if text[i] == '#':
 			tag = True
 			continue
 		if tag and text[i] != ' ':
 			hashtag += text[i]
-			print(hashtag)
 		if tag and text[i] == ' ':
 			tag = False
-			features.append(hashtag)
+			temp.append(hashtag)
 			hashtag = ''
+	if tag and len(hashtag) != 0:
+		temp.append(hashtag)
 
+	for word in temp:
+		pre = 0
+		flag = 0
+		for cur in range(len(word)):
+			if word[pre].islower() and word[cur].isupper():
+				text2 = normalize_text(word[flag:cur].lower())
+				if len(text2) > 0:
+					features.append(text2)
+				flag = cur
+			pre = cur
+		text2 = normalize_text(word[flag:].lower())
+		if len(text2) > 0:
+			features.append(text)
+
+	print(features)
 	text = normalize_text(text)
 	words = nltk_tokenize(text)
 	words += features
+	'''
+	res = []
+	for word in features:
+		res += lmtzr.lemmatize(word)
+	return res
+	'''
 	return words
 
-print(tokenize('fasdlk #dfdsjlfak dfjakslfj dffa'))
+print(tokenize('I see assholes here are referring to the #WoolseyFire in Malibu as Sodom &amp; Gomorrah. Shut the hell up. @RealJamesWoods helped @Alyssa_Milano b/c this is legit life-&amp;-death stuff. Trailer parks &amp; mansions burning. Natural disasters dont discriminate. Volunteer to help, dammit.'))
+print(tokenize('see'))

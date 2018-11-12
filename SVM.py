@@ -12,6 +12,7 @@ from sklearn import svm
 from sklearn.externals import joblib
 import time
 import datetime
+import random
 
 
 #===============================================================================
@@ -53,14 +54,19 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		line = f.readline()
 	f.close()
 
-	count = 0
-	right = 0
+	random.shuffle(dataSet)
 
+	TP = 0
+	FP = 0
+	TN = 0
+	FN = 0
+
+	count = 0
 	for data in dataSet:
-		count += 1
 		Y = data[0]
 		X = [data[1].strip('\n')]
 		
+		count += 1
 		if fe == 'one-hot':
 			x = fE.oneHotGet(X)
 		if fe == 'tf-idf':
@@ -72,17 +78,38 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		if descend == 'lda':
 			x = ldaGet(X)
 
-		if clf.predict(x)[0] == lb[Y]:
-			right += 1
+		if clf.predict(x)[0] == lb[Y] and lb[Y] == 1:
+			TP += 1
+		if clf.predict(x)[0] == lb[Y] and lb[Y] == -1:
+			TN += 1
+
+		if clf.predict(x)[0] != lb[Y] and lb[Y] == 1:
+			FN += 1
+		if clf.predict(x)[0] != lb[Y] and lb[Y] == -1:
+			FP += 1
 
 		if count % 5000 == 0:
 			break
 
+	#count = TP + TN + FN + FP
+	precision = TP / (TP + FP)
+	recall = TP / (TP + FN)
+	F1 = 2 * TP / (count + TP - TN)
 	print('svm测试\nlabel转换为:', lb, '\n特征提取为:', fe, '\n降维方法：', descend)
-	print('总计：', count, '分类正确', right, right / count)
+	print('TP:', TP, 'TN:', TN, 'FN:', FN, 'FP:', FP)
+	print('总计：', count)
+	print('精度:', TP + TN, ', ', (TP + TN) / count)
+	print('查准率：', precision)
+	print('查全率：', recall)
+	print('F1：', F1)
 	log = open('log.txt', 'a', encoding = 'utf-8')
 	log.write('svm测试\nlabel转换为: ' + str(lb)  + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
-	log.write('总计：' + str(count) + ', 分类正确' + str(right) + ', '  + str(right / count))
+	log.write('TP: ' + str(TP) + ', TN: ' + str(TN) + ', FN:' + str(FN) + ', FP:' + str(FP) + '\n')
+	log.write('总计： ' + str(count) + '\n')
+	log.write('精度: ' + str(TP + TN) + ', ' + str((TP + TN) / count) + '\n')
+	log.write('查准率： ' + str(precision) + '\n')
+	log.write('查全率： ' + str(recall) + '\n')
+	log.write('F1： ' + str(F1) + '\n')
 	log.close()
 
 
@@ -102,7 +129,7 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	#svmOneHot()
+	svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 3, fe = 'one-hot', descend = None)
 	accuracy()
 
 
