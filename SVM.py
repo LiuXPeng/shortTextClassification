@@ -39,7 +39,7 @@ def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot
 	print('svm训练, label转换为:', lb, '\n训练集规模：', n, '\n权重：', W,'\n特征提取为:', fe, '\n降维方法：', descend)
 	log = open('log.txt', 'a', encoding = 'utf-8')
 	log.write('svm训练, label转换为: ' + str(lb) + '\n训练集规模： ' + str(n) + '\n权重： ' + str(W) + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
-	log.write('模型保存在： svmTrainModel.m中\n')
+	log.write('模型保存在： svmTrainModel.m中\n---------------------\n')
 	log.close()
 
 	return
@@ -88,7 +88,10 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		if clf.predict(x)[0] != lb[Y] and lb[Y] == -1:
 			FP += 1
 
-		if count % 5000 == 0:
+		if count % 500 == 0:
+			print(count)
+
+		if count % 1000 == 0:
 			break
 
 	#count = TP + TN + FN + FP
@@ -109,7 +112,7 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	log.write('精度: ' + str(TP + TN) + ', ' + str((TP + TN) / count) + '\n')
 	log.write('查准率： ' + str(precision) + '\n')
 	log.write('查全率： ' + str(recall) + '\n')
-	log.write('F1： ' + str(F1) + '\n')
+	log.write('F1： ' + str(F1) + '\n-------------------\n')
 	log.close()
 
 
@@ -129,8 +132,19 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 3, fe = 'one-hot', descend = None)
-	accuracy()
+	for i in range(10):
+		k = 1 + i * 0.5
+		svmOneHot(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 1000, W = k, fe = 'one-hot', descend = None)
+		print('---------------------------------------')
+		accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = 'one-hot', descend = None)
+		print('######################################')
+
+	for i in range(10):
+		k = 1 + i * 0.5
+		svmOneHot(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 1000, W = k, fe = 'one-hot', descend = None)
+		print('---------------------------------------')
+		accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = 'one-hot', descend = None)
+		print('######################################')
 
 
 
