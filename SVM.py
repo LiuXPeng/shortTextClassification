@@ -13,6 +13,11 @@ from sklearn.externals import joblib
 import time
 import datetime
 import random
+import gensim
+from gensim.models import Word2Vec
+from gensim.models.word2vec import LineSentence
+import warnings
+warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
 
 
 #===============================================================================
@@ -62,6 +67,10 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	FN = 0
 
 	count = 0
+
+	if fe == 'word2vec':
+		model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin',binary=True)
+
 	for data in dataSet:
 		Y = data[0]
 		X = [data[1].strip('\n')]
@@ -72,7 +81,20 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		if fe == 'tf-idf':
 			x = fE.tfIdfGet(X)
 		if fe == 'word2vec':
-			x = fE.word2vec(X)
+			words = X[0].split(' ')
+			x = np.zeros(300)
+			n = 0
+			for word in words:
+				try:
+					k = model.wv[word]
+					x = x + k
+					n = n + 1
+				except:
+					continue
+			if n != 0:
+				#取平均
+				x = x / n
+			x = x.reshape(1, -1)
 		if descend == 'pca':
 			x = pcaGet(X)
 		if descend == 'lda':
@@ -132,20 +154,34 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	for i in range(10):
-		k = 1 + i * 0.5
-		svmOneHot(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 1000, W = k, fe = 'one-hot', descend = None)
+	temp = 'word2vec'
+	for i in range(5):
+		k = 1 + i * 3
+		svmOneHot(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
 		print('---------------------------------------')
-		accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = 'one-hot', descend = None)
+		accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
 		print('######################################')
 
-	for i in range(10):
-		k = 1 + i * 0.5
-		svmOneHot(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 1000, W = k, fe = 'one-hot', descend = None)
+	for i in range(5):
+		k = 1 + i * 3
+		svmOneHot(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
 		print('---------------------------------------')
-		accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = 'one-hot', descend = None)
+		accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
 		print('######################################')
 
+	for i in range(5):
+		k = 1 + i * 3
+		svmOneHot(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
+		print('---------------------------------------')
+		accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
+		print('######################################')
+
+	for i in range(5):
+		k = 1 + i * 3
+		svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = k, fe = temp, descend = None)
+		print('---------------------------------------')
+		accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
+		print('######################################')
 
 
 	return
