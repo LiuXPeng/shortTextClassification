@@ -61,60 +61,53 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 
 	random.shuffle(dataSet)
 
-	TP = 0
-	FP = 0
-	TN = 0
-	FN = 0
+	count = 3000
 
-	count = 0
+	X = []
+	Y = []
 
+	for i in range(count):
+		Y.append(dataSet[i][0])
+		X.append(dataSet[i][1].strip('\n'))
+
+	y = []
+	for s in Y:
+		y.append(lb[s])
+	if fe == 'one-hot':
+		x = fE.oneHotGet(X)
+	if fe == 'tf-idf':
+		x = fE.tfIdfGet(X)
 	if fe == 'word2vec':
-		model = gensim.models.KeyedVectors.load_word2vec_format('GoogleNews-vectors-negative300.bin',binary=True)
+		x = fE.word2vec(X)
+	if descend == 'pca':
+		x = pcaGet(X)
+	if descend == 'lda':
+		x = ldaGet(X)
 
-	for data in dataSet:
-		Y = data[0]
-		X = [data[1].strip('\n')]
-		
-		count += 1
-		if fe == 'one-hot':
-			x = fE.oneHotGet(X)
-		if fe == 'tf-idf':
-			x = fE.tfIdfGet(X)
-		if fe == 'word2vec':
-			words = X[0].split(' ')
-			x = np.zeros(300)
-			n = 0
-			for word in words:
-				try:
-					k = model.wv[word]
-					x = x + k
-					n = n + 1
-				except:
-					continue
-			if n != 0:
-				#取平均
-				x = x / n
-			x = x.reshape(1, -1)
-		if descend == 'pca':
-			x = pcaGet(X)
-		if descend == 'lda':
-			x = ldaGet(X)
+	TP = 1
+	FP = 1
+	TN = 1
+	FN = 1
 
-		if clf.predict(x)[0] == lb[Y] and lb[Y] == 1:
+
+	for i in range(count):
+
+		if fe != 'word2vec':
+			x[i] = np.array(x[i])
+		res = clf.predict(x[i].reshape(1, -1))
+
+		if res == y[i] and y[i] == 1:
 			TP += 1
-		if clf.predict(x)[0] == lb[Y] and lb[Y] == -1:
+		if res == y[i] and y[i] == -1:
 			TN += 1
-
-		if clf.predict(x)[0] != lb[Y] and lb[Y] == 1:
+		if res != y[i] and y[i] == 1:
 			FN += 1
-		if clf.predict(x)[0] != lb[Y] and lb[Y] == -1:
+		if res != y[i] and y[i] == -1:
 			FP += 1
 
-		if count % 500 == 0:
-			print(count)
+		if i % 500 == 0:
+			print(i)
 
-		if count % 3000 == 0:
-			break
 
 	#count = TP + TN + FN + FP
 	precision = TP / (TP + FP)
@@ -154,27 +147,27 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'word2vec'
+	temp = 'one-hot'
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 3000, W = 3.7, fe = temp, descend = None)
 	print('---------------------------------------')
 	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 3000, W = 4, fe = temp, descend = None)
 	print('---------------------------------------')
 	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 3000, W = 2.7, fe = temp, descend = None)
 	print('---------------------------------------')
 	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 3000, W = 10, fe = temp, descend = None)
 	print('---------------------------------------')
 	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
 	print('######################################')
