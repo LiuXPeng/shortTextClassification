@@ -22,7 +22,7 @@ warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
 
 #===============================================================================
 #-------------------------------------svm-----------------------------------
-def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot', descend = None):
+def svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot', descend = None):
 	Y, X = fE.sample(n)
 	y = []
 	for s in Y:
@@ -37,7 +37,7 @@ def svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot
 		x = pcaGet(X)
 	if descend == 'lda':
 		x = ldaGet(X)
-	clf = svm.SVC(class_weight = {-1:1, 1: W})
+	clf = svm.SVC(class_weight = {1:1, -1: W})
 	clf.fit(x, y)
 	joblib.dump(clf, "svmTrainModel.m")
 
@@ -113,7 +113,7 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 		if count % 500 == 0:
 			print(count)
 
-		if count % 1000 == 0:
+		if count % 3000 == 0:
 			break
 
 	#count = TP + TN + FN + FP
@@ -155,33 +155,29 @@ def main():
 
 	#--------------------------------------------------------
 	temp = 'word2vec'
-	for i in range(5):
-		k = 1 + i * 3
-		svmOneHot(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
-		print('---------------------------------------')
-		accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
-		print('######################################')
 
-	for i in range(5):
-		k = 1 + i * 3
-		svmOneHot(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
-		print('---------------------------------------')
-		accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
-		print('######################################')
+	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = None)
+	print('---------------------------------------')
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
+	print('######################################')
 
-	for i in range(5):
-		k = 1 + i * 3
-		svmOneHot(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 1000, W = k, fe = temp, descend = None)
-		print('---------------------------------------')
-		accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
-		print('######################################')
 
-	for i in range(5):
-		k = 1 + i * 3
-		svmOneHot(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = k, fe = temp, descend = None)
-		print('---------------------------------------')
-		accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
-		print('######################################')
+	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = None)
+	print('---------------------------------------')
+	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
+	print('######################################')
+
+
+	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = None)
+	print('---------------------------------------')
+	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
+	print('######################################')
+
+
+	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = None)
+	print('---------------------------------------')
+	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
+	print('######################################')
 
 
 	return
