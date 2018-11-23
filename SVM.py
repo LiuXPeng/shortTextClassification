@@ -33,10 +33,12 @@ def svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot'
 		x = fE.tfIdfGet(X)
 	if fe == 'word2vec':
 		x = fE.word2vec(X)
+
 	if descend == 'pca':
-		x = pcaGet(X)
+		x = fE.pcaGet(x)
 	if descend == 'lda':
-		x = ldaGet(X)
+		x = fE.ldaGet(x)
+
 	clf = svm.SVC(class_weight = {1:1, -1: W})
 	clf.fit(x, y)
 	joblib.dump(clf, "svmTrainModel.m")
@@ -80,9 +82,9 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	if fe == 'word2vec':
 		x = fE.word2vec(X)
 	if descend == 'pca':
-		x = pcaGet(X)
+		x = fE.pcaGet(x)
 	if descend == 'lda':
-		x = ldaGet(X)
+		x = fE.ldaGet(x)
 
 	TP = 1
 	FP = 1
@@ -147,29 +149,29 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'one-hot'
+	temp = 'tf-idf'
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = 'lda')
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = 'lda')
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = 'lda')
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = 'lda')
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = 'lda')
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = 'lda')
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = None)
+	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = 'lda')
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = 'lda')
 	print('######################################')
 
 
