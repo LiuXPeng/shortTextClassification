@@ -151,27 +151,27 @@ def main():
 	#--------------------------------------------------------
 	temp = 'tf-idf'
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = 'lda')
+	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = None)
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = 'lda')
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = 'lda')
+	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = None)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = 'lda')
+	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = 'lda')
+	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = None)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = 'lda')
+	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = 'lda')
+	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = None)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = 'lda')
+	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
 	print('######################################')
 
 
