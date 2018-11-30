@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-'特征提取'
+'svm'
 
 __author__ = 'lxp'
 
