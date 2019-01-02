@@ -149,29 +149,30 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'word2vec'
-
-	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = None)
+	temp = 'one-hot'
+	Des = 'pca'
+	
+	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = None)
+	lrTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = None)
+	lrTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = None)
+	lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
 	print('######################################')
 
 
