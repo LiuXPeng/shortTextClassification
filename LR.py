@@ -8,7 +8,8 @@ __author__ = 'lxp'
 
 import featureExtract as fE
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.externals import joblib
 import time
 import datetime
 import random
@@ -38,7 +39,7 @@ def lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000,  fe = 'one-hot', desce
 	if descend == 'lda':
 		x = fE.ldaGet(x)
 
-	clf = LinearRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight="balanced", random_state=None, solver='liblinear', max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+	clf = LogisticRegression(C = 1, penalty='l1', tol=0.01, solver='saga')
 	clf.fit(x, y)
 	joblib.dump(clf, "lrTrainModel.m")
 
