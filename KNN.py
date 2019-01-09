@@ -149,8 +149,8 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'one-hot'
-	Des = 'pca'
+	temp = 'tf-idf'
+	Des = None
 	
 	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
 	print('---------------------------------------')
