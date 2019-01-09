@@ -39,20 +39,20 @@ def lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000,  fe = 'one-hot', desce
 	if descend == 'lda':
 		x = fE.ldaGet(x)
 
-	clf = LogisticRegression(C = 1, penalty='l1', tol=0.01, solver='saga')
+	clf = NearestCentroid()
 	clf.fit(x, y)
-	joblib.dump(clf, "lrTrainModel.m")
+	joblib.dump(clf, "knnTrainModel.m")
 
-	print('lr训练, label转换为:', lb, '\n训练集规模：', n, '\n特征提取为:', fe, '\n降维方法：', descend)
+	print('knn训练, label转换为:', lb, '\n训练集规模：', n, '\n特征提取为:', fe, '\n降维方法：', descend)
 	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('lr训练, label转换为: ' + str(lb) + '\n训练集规模： ' + str(n) + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
-	log.write('模型保存在： lrTrainModel.m中\n---------------------\n')
+	log.write('knn训练, label转换为: ' + str(lb) + '\n训练集规模： ' + str(n) + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
+	log.write('模型保存在： knnTrainModel.m中\n---------------------\n')
 	log.close()
 
 	return
 
 def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None):
-	clf = joblib.load("lrTrainModel.m")
+	clf = joblib.load("knnTrainModel.m")
 	f = open('label_segmentation_test.txt', 'r', encoding = 'utf-8')
 	line = f.readline()
 	dataSet = []
@@ -115,7 +115,7 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	precision = TP / (TP + FP)
 	recall = TP / (TP + FN)
 	F1 = 2 * TP / (count + TP - TN)
-	print('lr测试\nlabel转换为:', lb, '\n特征提取为:', fe, '\n降维方法：', descend)
+	print('knn测试\nlabel转换为:', lb, '\n特征提取为:', fe, '\n降维方法：', descend)
 	print('TP:', TP, 'TN:', TN, 'FN:', FN, 'FP:', FP)
 	print('总计：', count)
 	print('精度:', TP + TN, ', ', (TP + TN) / count)
@@ -123,7 +123,7 @@ def accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = 'one-hot', descend = None)
 	print('查全率：', recall)
 	print('F1：', F1)
 	log = open('log.txt', 'a', encoding = 'utf-8')
-	log.write('lr测试\nlabel转换为: ' + str(lb)  + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
+	log.write('knn测试\nlabel转换为: ' + str(lb)  + '\n特征提取为: ' + str(fe) + '\n降维方法： ' + str(descend) + '\n')
 	log.write('TP: ' + str(TP) + ', TN: ' + str(TN) + ', FN:' + str(FN) + ', FP:' + str(FP) + '\n')
 	log.write('总计： ' + str(count) + '\n')
 	log.write('精度: ' + str(TP + TN) + ', ' + str((TP + TN) / count) + '\n')
@@ -150,7 +150,7 @@ def main():
 
 	#--------------------------------------------------------
 	temp = 'one-hot'
-	Des = 'pca'
+	Des = None
 	
 	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
 	print('---------------------------------------')
