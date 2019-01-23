@@ -39,7 +39,7 @@ def svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000, W = 1, fe = 'one-hot'
 	if descend == 'lda':
 		x = fE.ldaGet(x)
 
-	clf = svm.SVC(class_weight = {1:1, -1: W})
+	clf = svm.SVC(class_weight = 'balanced')
 	clf.fit(x, y)
 	joblib.dump(clf, "svmTrainModel.m")
 
@@ -150,28 +150,23 @@ def main():
 
 	#--------------------------------------------------------
 	temp = 'tf-idf'
+	Des = 'pca'
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 4, fe = temp, descend = None)
+	svmTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 4, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = None)
+	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	svmTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 2.7, fe = temp, descend = None)
+	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 2.7, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = None)
-	print('######################################')
-
-
-	svmTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 10, fe = temp, descend = None)
-	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = None)
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
 	print('######################################')
 
 
