@@ -39,7 +39,7 @@ def lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 1000,  fe = 'one-hot', desce
 	if descend == 'lda':
 		x = fE.ldaGet(x)
 
-	clf = LogisticRegression(C = 1, penalty='l1', tol=0.01, solver='saga')
+	clf = LogisticRegression(C = 1, penalty='l1', tol=0.01, class_weight = 'balanced', solver='saga')
 	clf.fit(x, y)
 	joblib.dump(clf, "lrTrainModel.m")
 
@@ -149,30 +149,56 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'one-hot'
-	Des = 'pca'
+	temp = 'word2vec'
+	Des = None
 	
-	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	lrTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
+	print('######################################')
+
+	#--------------------------------------------------------
+	temp = 'tf-idf'
+	
+	#lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	print('---------------------------------------')
+	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
+	lrTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
+	print('---------------------------------------')
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
 	print('######################################')
 
 

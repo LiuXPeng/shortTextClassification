@@ -149,30 +149,58 @@ def main():
 	f.close()
 
 	#--------------------------------------------------------
-	temp = 'tf-idf'
-	Des = 'lda'
+	temp = 'one-hot'
+	Des = None
 	
-	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	lrTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
 	print('######################################')
 
 
-	lrTrain(lb = {'b':1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
+	#--------------------------------------------------------
+	temp = 'tf-idf'
+	Des = None
+	
+	#lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des) 
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, fe = temp, descend = Des)
+	print('---------------------------------------')
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	print('######################################')
+
+
+	lrTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000,  fe = temp, descend = Des)
+	print('---------------------------------------')
+	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
 	print('######################################')
 
 
