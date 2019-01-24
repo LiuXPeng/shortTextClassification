@@ -152,44 +152,44 @@ def main():
 	temp = 'one-hot'
 	Des = None
 
-	svmTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = Des)
-	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
-	print('######################################')
+	#svmTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = Des)
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
 
 
 	svmTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 4, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)#-----
 	print('######################################')
 
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 2.7, fe = temp, descend = Des)
-	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
-	print('######################################')
+	#svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 2.7, fe = temp, descend = Des)
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
+	#print('######################################')
 
 
 	#--------------------------------------------------------
 	temp = 'tf-idf'
 	Des = None
 
-	svmTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = Des)
-	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
-	print('######################################')
+	#svmTrain(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, n = 10000, W = 3.7, fe = temp, descend = Des)
+	#print('---------------------------------------')
+	#ccuracy(lb = {'b':-1, 't':-1, 'e':1, 'm':1}, fe = temp, descend = Des)
+	#print('######################################')
 
 
 	svmTrain(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, n = 10000, W = 4, fe = temp, descend = Des)
 	print('---------------------------------------')
-	accuracy(lb = {'b':1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)
+	accuracy(lb = {'b':-1, 't':1, 'e':-1, 'm':1}, fe = temp, descend = Des)#======
 	print('######################################')
 
 
-	svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 2.7, fe = temp, descend = Des)
-	print('---------------------------------------')
-	accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
-	print('######################################')
+	#svmTrain(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, n = 10000, W = 2.7, fe = temp, descend = Des)
+	#print('---------------------------------------')
+	#accuracy(lb = {'b':-1, 't':1, 'e':1, 'm':-1}, fe = temp, descend = Des)
+	#print('######################################')
 
 
 	return
